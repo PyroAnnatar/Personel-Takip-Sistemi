@@ -1,31 +1,31 @@
-import { useState } from 'react'
-import Header from './components/Header'
-import './styles.css'
+import { useState } from "react";
+import Header from "./components/Header";
+import "./styles.css";
 export default function App() {
-  const [userInput, setUserInput] = useState('')
-  const [trackingReports, setTrackingReports] = useState([])
+  const [userInput, setUserInput] = useState("");
+  const [trackingReports, setTrackingReports] = useState([]);
 
-  const infractionMessage = '🚨🚨🚨 İHLAL TESPİT EDİLDİ! 🚨🚨🚨'
+  const infractionMessage = "🚨🚨🚨 İHLAL TESPİT EDİLDİ! 🚨🚨🚨";
 
   if (trackingReports.length > 0) {
-    console.log(trackingReports)
+    console.log(trackingReports);
     if (trackingReports[trackingReports.length - 1].infractionDetected) {
-      console.log(infractionMessage)
+      console.log(infractionMessage);
     }
   }
 
   function getTimeStamp() {
-    const timeStamp = new Date()
+    const timeStamp = new Date();
     return (
       timeStamp.toLocaleTimeString([], {
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
         hour12: false,
       }) +
-      '.' +
+      "." +
       (timeStamp.getMilliseconds() / 1000).toFixed(3).slice(-3)
-    )
+    );
   }
 
   /* Challenge 
@@ -56,10 +56,33 @@ Bu şirket çalışanlarını gözetlemek istiyor. Göreviniz aşağıdakileri y
        4. Yalnızca aşağıdaki kodu yazmanız gerekir. Yukarıdaki veya projenin başka bir yerindeki kodların hiçbirinin değiştirilmesi gerekmiyor.
 */
 
+  function handlePrivacyInvasion(e) {
+    let fsociety = e.target.value;
+    const whiteRabbit = fsociety.includes("Evil Corp.");
+
+    if (whiteRabbit) {
+      fsociety = fsociety.replace("Evil Corp.", "Good Corp.");
+    }
+
+    setUserInput(fsociety);
+    setTrackingReports((prev) => [
+      ...prev,
+      {
+        timeStamp: getTimeStamp(),
+        employeeInput: fsociety,
+        infractionDetected: whiteRabbit,
+      },
+    ]);
+  }
+
   return (
     <div>
       <Header />
-      <textarea placeholder='Raporunuzu buraya yazın...' />
+      <textarea
+        placeholder="Raporunuzu buraya yazın... fsociety"
+        value={userInput}
+        onChange={handlePrivacyInvasion}
+      />
     </div>
-  )
+  );
 }
